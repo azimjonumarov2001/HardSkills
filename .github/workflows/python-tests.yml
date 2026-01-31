@@ -46,8 +46,8 @@ jobs:
       - name: Run tests
         env:
           DATABASE_URL: postgresql+asyncpg://user:password@localhost:5432/test_db
-          REDIS_URL: redis://localhost:6379
-          SECRET_KEY: "test_secret"
+          REDIS_URL: redis://localhost:6379/0
+          SECRET_KEY: "super_key"
           ALGORITHM: "HS256"
         run: |
-          pytest db1/tests/
+          python -m pytest db1/tests/
