@@ -2,15 +2,15 @@ name: Python CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ "main", "master" ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ "main", "master" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    # Поднимаем временную БД и Redis для тестов
+    # Поднимаем временную базу и Redis прямо в облаке GitHub
     services:
       postgres:
         image: postgres:15
@@ -35,20 +35,20 @@ jobs:
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest pytest-asyncio  # Добавь это для надежности
+          pip install pytest pytest-asyncio
 
-      - name: Test with pytest
+      - name: Run tests
         env:
-          # Сообщаем тестам, где искать временную БД
+          # Эти данные должны совпадать с тем, что в блоке services выше
           DATABASE_URL: postgresql+asyncpg://hard_skill:lasthero2026@localhost:5432/backend_azim
           REDIS_URL: redis://localhost:6379
-          SECRET_KEY: "test_secret_for_ci"
+          SECRET_KEY: "super-secret-test-key"
           ALGORITHM: "HS256"
         run: |
           pytest
